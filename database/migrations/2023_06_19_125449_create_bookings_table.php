@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->bigInteger('amount');
             $table->tinyInteger('has_discount')->default(0);
+            $table->tinyInteger('max_participants_number');
             $table->tinyInteger('cancel')->default(0);
             $table->timestamps();
         });

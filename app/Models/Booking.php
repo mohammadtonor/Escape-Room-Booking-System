@@ -9,6 +9,16 @@ class Booking extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'bookings',
+        'time_slot_id',
+        'user_id',
+        'amount',
+        'has_discount',
+        'cancel',
+        'participants_number'
+    ];
+
     public function booking()
     {
         return $this->hasMany(Booking::class);

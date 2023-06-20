@@ -17,7 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->text('story');
             $table->tinyInteger('duration');
-            $table->string('participants_number');
+            $table->tinyInteger('min_participants_number');
+            $table->tinyInteger('max_participants_number');
             $table->tinyInteger('difficulty');
             $table->tinyInteger('Scary_degree');
             $table->string('phone_number');
