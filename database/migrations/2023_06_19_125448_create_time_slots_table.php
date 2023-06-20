@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('time_slots', function (Blueprint $table) {
             $table->id();
             $table->foreignId('escape_room_id')->constrained('escape_rooms');
-            $table->date('date');
-            $table->time('start_time');
+            $table->datetime('start_time_slot');
             $table->integer('price');
+            $table->tinyInteger('is_reserved')->default('0');
             $table->timestamps();
         });
     }

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('time_slot_id')->constrained('time_slots');
             $table->foreignId('user_id')->constrained();
+            $table->bigInteger('amount');
+            $table->tinyInteger('has_discount')->default(0);
             $table->tinyInteger('cancel')->default(0);
             $table->timestamps();
         });

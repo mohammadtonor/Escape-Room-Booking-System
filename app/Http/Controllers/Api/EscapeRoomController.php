@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\EscapeRoomResource;
+use App\Http\Resources\TimeSlotResource;
 use App\Models\EscapeRoom;
-use App\Http\Requests\StoreEscapeRoomRequest;
-use App\Http\Requests\UpdateEscapeRoomRequest;
+use App\Models\TimeSlot;
+use Illuminate\Http\Request;
 
 class EscapeRoomController extends Controller
 {
@@ -13,12 +16,19 @@ class EscapeRoomController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'data' => [
+                'escape_rooms' => EscapeRoomResource::collection(EscapeRoom::with('timeslots')->paginate(5))->response()->getData()
+            ],
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
+
+
+
     public function create()
     {
         //
@@ -27,7 +37,7 @@ class EscapeRoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEscapeRoomRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -35,15 +45,21 @@ class EscapeRoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(EscapeRoom $escapeRoom)
+    public function show($id)
     {
-        //
+
+        return new EscapeRoomResource(EscapeRoom::find($id));
+    }
+
+    public function getTimeSlots($id)
+    {
+        return new TimeSlotResource(TimeSlot::where('escape_room_id',$id)->first());
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(EscapeRoom $escapeRoom)
+    public function edit(string $id)
     {
         //
     }
@@ -51,7 +67,7 @@ class EscapeRoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateEscapeRoomRequest $request, EscapeRoom $escapeRoom)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -59,7 +75,7 @@ class EscapeRoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EscapeRoom $escapeRoom)
+    public function destroy(string $id)
     {
         //
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\EscapeRoom;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class TimeSlotFactory extends Factory
      */
     public function definition(): array
     {
+        $escapeRoom = EscapeRoom::inRandomOrder()->first();
         return [
-            //
+            'escape_room_id' => $escapeRoom->id,
+            'start_time_slot' => fake()->dateTimeBetween(),
+            'price' => fake()->numberBetween(10000,1000000),
+            'is_reserved' => 0
         ];
     }
 }
