@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingRequest;
+use App\Models\Booking;
+use App\Models\TimeSlot;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,10 +34,23 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request)
     {
-
-        if ( Carbon::parse(auth()->id()->birthday)->isBirthday()){
-            
+        $final_amount = 0;
+        $first_amount = TimeSlot::find($request->time_slot_id)->price;
+        if ( Carbon::parse(User::find(auth()->id())->birthday)->isBirthday()){
+            $discount = $first_amount * 0.10;
+            $final_amount = $first_amount - $discount;
+        }else{
+            $final_amount = $first_amount;
         }
+
+        $booking = Booking::create([
+            'time_slot_id' =>$request->time_slot_id,
+            'user_id' =>auth()->id(),
+            'amount' =>$final_amount,
+            'max_participants_number' =>$request->max_participants,
+        ]);
+
+        return $booking;
     }
 
     /**

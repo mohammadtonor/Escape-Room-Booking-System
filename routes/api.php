@@ -17,15 +17,15 @@ use App\Http\Controllers;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/booking' , [BookingController::class,'store']);
+    Route::get('/booking' , [BookingController::class,'index']);
+    Route::delete('/booking/{id}' , [BookingController::class,'destroy']);
 });
 
-Route::post('auth/register', \App\Http\Controllers\Auth\RegisterController::class);
+Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class,'store']);
 
 Route::get('/escape-rooms' , [EscapeRoomController::class,'index']);
 Route::get('/escape-rooms/{id}' , [EscapeRoomController::class,'show']);
 Route::get('/escape-rooms/{id}/timeslots' , [EscapeRoomController::class,'getTimeSlots']);
-Route::post('/booking' , [BookingController::class,'store']);
-Route::get('/booking' , [BookingController::class,'index']);
-Route::delete('/booking/{id}' , [BookingController::class,'destroy']);
+

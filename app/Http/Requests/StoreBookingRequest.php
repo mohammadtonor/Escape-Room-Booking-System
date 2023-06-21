@@ -22,7 +22,8 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'time_slot_id'=> ['required', 'exists:time_slots,id'],
+            'max_participants'=> ['required']
         ];
     }
 }

@@ -8,16 +8,20 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+class RegisterController
 {
-    public function __invoke(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'birthday' => ['required|date_format:Y-m-d'],
-            'password' => ['required', 'confirmed'],
-        ]);
+
+//        $request->validate([
+//            'name' => ['required', 'string', 'max:255'],
+//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'birthday' => ['required|date_format:Y-m-d'],
+//            'password' => ['required', 'confirmed'],
+//        ]);
+
+
+        //dd($request);
 
         $user = User::create([
             'name' => $request->name,
@@ -25,6 +29,8 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'birthday' => $request->birthday
         ]);
+
+
 
         return response()->json([
             'access_token' => $user->createToken('client')->plainTextToken,
