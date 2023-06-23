@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CheckResrvedTimeSlotRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookingRequest extends FormRequest
@@ -21,8 +22,9 @@ class StoreBookingRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            'time_slot_id'=> ['required', 'exists:time_slots,id'],
+            'time_slot_id'=> ['required', 'exists:time_slots,id', new CheckResrvedTimeSlotRule()],
             'max_participants'=> ['required']
         ];
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingRequest;
+use App\Http\Resources\BookingResource;
+use App\Http\Resources\EscapeRoomResource;
 use App\Models\Booking;
 use App\Models\TimeSlot;
 use App\Models\User;
@@ -18,7 +20,8 @@ class BookingController extends Controller
      */
     public function index()
     {
-        //
+        $booking = Booking::where('user_id',\auth()->id())->get();
+        return BookingResource::collection(Booking::where('user_id',\auth()->id())->get());
     }
 
     /**
@@ -34,14 +37,20 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request)
     {
+
         $final_amount = 0;
-        $first_amount = TimeSlot::find($request->time_slot_id)->price;
+        $time_slot = TimeSlot::find($request->time_slot_id);
+        $first_amount = $time_slot->price;
         if ( Carbon::parse(User::find(auth()->id())->birthday)->isBirthday()){
             $discount = $first_amount * 0.10;
             $final_amount = $first_amount - $discount;
         }else{
             $final_amount = $first_amount;
         }
+
+        $time_slot->update([
+            'is_reserved' => 1
+        ]);
 
         $booking = Booking::create([
             'time_slot_id' =>$request->time_slot_id,
@@ -50,13 +59,13 @@ class BookingController extends Controller
             'max_participants_number' =>$request->max_participants,
         ]);
 
-        return $booking;
+        return new BookingResource($booking);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show( $id)
     {
         //
     }
@@ -80,8 +89,15 @@ class BookingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $booking = Booking::find($id);
+        if ($booking->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        $booking->delete();
+
+        return response()->noContent();
     }
 }

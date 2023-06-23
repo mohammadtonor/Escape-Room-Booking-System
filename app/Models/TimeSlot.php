@@ -16,7 +16,7 @@ class TimeSlot extends Model
         'is_reserved'
     ];
 
-    public function timeSlots()
+    public function escapeRoom()
     {
         return $this->belongsTo(EscapeRoom::class);
     }
